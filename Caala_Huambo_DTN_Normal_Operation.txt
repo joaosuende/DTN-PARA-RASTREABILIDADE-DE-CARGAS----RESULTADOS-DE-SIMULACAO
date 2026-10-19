@@ -1,0 +1,281 @@
+# ============================================================
+# CENÁRIO 2
+# OPERAÇÃO LOGÍSTICA NORMAL COM DTN
+# CENÁRIO: CAÁLA - HUAMBO
+# ============================================================
+
+# OBJECTIVO:
+#
+# Simular uma operação logística baseada em DTN,
+# utilizando veículos móveis no corredor Caála-Huambo.
+#
+# Os dados representam informações de auditoria e
+# monitorização recolhidas pelos veículos.
+#
+# Os veículos armazenam, transportam e encaminham
+# mensagens através do paradigma Store-Carry-Forward.
+#
+# ============================================================
+
+
+# ============================================================
+# SCENARIO
+# ============================================================
+
+Scenario.name = Caala_Huambo_DTN_Normal_Operation
+
+
+# Activar simulação das ligações
+Scenario.simulateConnections = true
+
+
+# Actualização da simulação em segundos
+Scenario.updateInterval = 1
+
+
+# ------------------------------------------------------------
+# DURAÇÃO DA SIMULAÇÃO
+# ------------------------------------------------------------
+#
+# 6 horas = 21600 segundos
+#
+Scenario.endTime = 21600
+
+
+# ============================================================
+# MOVEMENT MODEL
+# ============================================================
+
+# Área do mundo da simulação
+#
+# Mantemos o mesmo valor do Basic Test
+# para garantir comparação experimental.
+#
+MovementModel.worldSize = 45069, 32933
+
+
+# Sem período de aquecimento
+MovementModel.warmup = 0
+
+
+# Semente fixa para permitir repetição dos testes
+MovementModel.rngSeed = 1
+
+
+# ============================================================
+# MAPA / ESTRADAS
+# ============================================================
+
+MapBasedMovement.nrofMapFiles = 1
+
+
+# Estradas normalizadas utilizadas no corredor
+# Caála - Huambo
+#
+MapBasedMovement.mapFile1 = data/caala_huambo_roads.wkt
+
+
+# ============================================================
+# INTERFACE DE COMUNICAÇÃO
+# ============================================================
+
+LoRaInterface.type = SimpleBroadcastInterface
+
+
+# Velocidade de transmissão
+#
+# Mantemos o valor utilizado no Basic Test
+# para alterar apenas as variáveis temporais.
+#
+LoRaInterface.transmitSpeed = 250k
+
+
+# Alcance de comunicação
+#
+# 1500 metros
+#
+# Valor intermédio da faixa de estudo:
+# 700 m a 2000 m
+#
+LoRaInterface.transmitRange = 1500
+
+
+# ============================================================
+# HOST GROUPS
+# ============================================================
+
+Scenario.nrofHostGroups = 1
+
+
+# ============================================================
+# GRUPO 1
+# VEÍCULOS LOGÍSTICOS MÓVEIS
+# ============================================================
+
+Group1.groupID = VEHICLE
+
+
+# Número de veículos
+#
+# Mantemos 5 veículos para comparação
+# directa com o Basic Test.
+#
+Group1.nrofHosts = 5
+
+
+# ============================================================
+# MOBILIDADE
+# ============================================================
+
+# Movimento baseado nas estradas
+#
+Group1.movementModel = ShortestPathMapBasedMovement
+
+
+# Mapa permitido
+Group1.okMaps = 1
+
+
+# Tempo de espera
+#
+# Mantido igual ao Basic Test.
+#
+Group1.waitTime = 10, 30
+
+
+# ============================================================
+# VELOCIDADE DOS VEÍCULOS
+# ============================================================
+
+# 10 m/s = 36 km/h
+# 20 m/s = 72 km/h
+#
+# Faixa representativa de circulação
+# de veículos no corredor rodoviário.
+#
+Group1.speed = 10, 20
+
+
+# ============================================================
+# ROUTER DTN
+# ============================================================
+
+# Epidemic Router
+#
+# Mantido para permitir comparação
+# directa com o cenário Basic Test.
+#
+Group1.router = EpidemicRouter
+
+
+# ============================================================
+# BUFFER
+# ============================================================
+
+# Buffer de armazenamento DTN
+#
+Group1.bufferSize = 10M
+
+
+# ============================================================
+# INTERFACE DO GRUPO
+# ============================================================
+
+Group1.nrofInterfaces = 1
+
+Group1.interface1 = LoRaInterface
+
+
+# ============================================================
+# EVENTS
+# ============================================================
+
+Events.nrof = 1
+
+
+# ============================================================
+# EVENTO 1
+# GERADOR DE DADOS DE AUDITORIA
+# ============================================================
+
+Events1.class = MessageEventGenerator
+
+
+# ------------------------------------------------------------
+# HOSTS PARTICIPANTES
+# ------------------------------------------------------------
+#
+# Nós:
+#
+# 0
+# 1
+# 2
+# 3
+# 4
+#
+# O gerador escolhe origem e destino
+# dentro deste intervalo.
+#
+Events1.hosts = 0, 4
+
+
+# ------------------------------------------------------------
+# INTERVALO DE GERAÇÃO
+# ------------------------------------------------------------
+#
+# Dados gerados a cada 30 minutos
+#
+# 30 minutos = 1800 segundos
+#
+# Representa a periodicidade operacional
+# definida para o sistema de auditoria.
+#
+Events1.interval = 1800, 1800
+
+
+# ------------------------------------------------------------
+# TAMANHO DAS MENSAGENS
+# ------------------------------------------------------------
+#
+# Mensagens pequenas representando:
+#
+# - localização
+# - estado da carga
+# - dados de auditoria
+# - dados ambientais
+# - eventos logísticos
+#
+Events1.size = 1k, 5k
+
+
+# ------------------------------------------------------------
+# PREFIXO
+# ------------------------------------------------------------
+
+Events1.prefix = AUD
+
+
+# ============================================================
+# REPORTS
+# ============================================================
+
+Report.nrofReports = 1
+
+
+# ============================================================
+# RELATÓRIO DE ESTATÍSTICAS
+# ============================================================
+
+Report.report1 = MessageStatsReport
+
+
+# ============================================================
+# CONFIGURAÇÃO FINAL
+# ============================================================
+
+Report.warmup = 0
+
+
+# ============================================================
+# FIM DA CONFIGURAÇÃO
+# ============================================================

@@ -1,0 +1,79 @@
+# ==========================================
+# CENARIO: CAALA - HUAMBO
+# ==========================================
+
+Scenario.name = Caala_Huambo
+Scenario.simulateConnections = true
+Scenario.updateInterval = 0.1
+Scenario.endTime = 3600
+
+
+# ==========================================
+# MAPA
+# ==========================================
+
+MovementModel.rngSeed = 1
+MovementModel.worldSize = 33594, 23192
+MovementModel.warmup = 0
+
+MapBasedMovement.nrofMapFiles = 1
+MapBasedMovement.mapFile1 = data/roads_normalized.wkt
+
+
+# ==========================================
+# APENAS UM GRUPO PARA TESTE
+# ==========================================
+
+Scenario.nrofHostGroups = 1
+
+Group.groupID = n
+Group.nrofHosts = 5
+
+Group.movementModel = ShortestPathMapBasedMovement
+
+Group.router = EpidemicRouter
+
+Group.bufferSize = 5M
+
+Group.waitTime = 0, 30
+
+Group.speed = 1, 2
+
+Group.msgTtl = 300
+
+
+# ==========================================
+# INTERFACE
+# ==========================================
+
+Group.nrofInterfaces = 1
+
+Group.interface1 = btInterface
+
+btInterface.type = SimpleBroadcastInterface
+btInterface.transmitSpeed = 250k
+btInterface.transmitRange = 5000
+
+
+# ==========================================
+# SEM MENSAGENS POR ENQUANTO
+# ==========================================
+
+Events.nrof = 1
+Events1.class = MessageEventGenerator
+Events1.hosts = 0,4
+Events1.interval = 30,60
+Events1.size = 500k,1M
+Events1.prefix = M
+
+
+# ==========================================
+# RELATORIOS
+# ==========================================
+# ==========================================
+# RELATÓRIOS DA SIMULAÇÃO
+# ==========================================
+
+Report.nrofReports = 1
+
+Report.report1 = MessageStatsReport

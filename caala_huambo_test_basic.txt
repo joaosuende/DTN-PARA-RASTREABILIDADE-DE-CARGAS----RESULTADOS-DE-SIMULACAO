@@ -1,0 +1,254 @@
+# ============================================================
+# TESTE BÁSICO DE TRANSMISSÃO DTN
+# CENÁRIO: CAÁLA - HUAMBO
+#
+# OBJECTIVO:
+# Validar:
+# - Mobilidade dos veículos
+# - Criação de mensagens
+# - Contactos entre nós
+# - Store-Carry-Forward
+# - Encaminhamento DTN
+# - Entrega de mensagens
+#
+# ESTE NÃO É O CENÁRIO FINAL DO ARTIGO
+# ============================================================
+
+
+# ============================================================
+# SCENARIO
+# ============================================================
+
+Scenario.name = Caala_Huambo_DTN_Basic_Test
+
+# Activar simulação das ligações
+Scenario.simulateConnections = true
+
+# Actualização da simulação em segundos
+Scenario.updateInterval = 1
+
+# Duração:
+# 1 hora = 3600 segundos
+Scenario.endTime = 3600
+
+
+# ============================================================
+# MOVEMENT MODEL
+# ============================================================
+
+# Área do mundo da simulação
+#
+# Mantemos inicialmente a área utilizada no cenário anterior
+# para não introduzir uma nova variável durante este teste.
+MovementModel.worldSize = 45069, 32933
+
+# Sem período de aquecimento
+MovementModel.warmup = 0
+
+# Semente fixa para permitir repetição dos testes
+MovementModel.rngSeed = 1
+
+
+# ============================================================
+# MAPA / ESTRADAS
+# ============================================================
+
+MapBasedMovement.nrofMapFiles = 1
+
+# Estradas normalizadas utilizadas no corredor
+# Caála - Huambo
+MapBasedMovement.mapFile1 = data/caala_huambo_roads.wkt
+
+
+# ============================================================
+# INTERFACE DE COMUNICAÇÃO
+# ============================================================
+
+LoRaInterface.type = SimpleBroadcastInterface
+
+# Velocidade de transmissão
+#
+# 250 kB/s é utilizada neste teste como abstração
+# da ligação de comunicação.
+#
+# O OBJECTIVO actual não é modelar fisicamente
+# todos os parâmetros da camada LoRa.
+LoRaInterface.transmitSpeed = 250k
+
+# Alcance de comunicação
+#
+# Valor intermédio dentro da faixa de estudo:
+# 700 m a 2000 m
+LoRaInterface.transmitRange = 1500
+
+
+# ============================================================
+# HOST GROUPS
+# ============================================================
+
+Scenario.nrofHostGroups = 1
+
+
+# ============================================================
+# GRUPO 1
+# VEÍCULOS MÓVEIS
+# ============================================================
+
+Group1.groupID = VEHICLE
+
+# Número de veículos
+#
+# Hosts criados:
+# VEHICLE0
+# VEHICLE1
+# VEHICLE2
+# VEHICLE3
+# VEHICLE4
+Group1.nrofHosts = 5
+
+
+# ============================================================
+# MOBILIDADE
+# ============================================================
+
+# Movimento baseado nas estradas
+Group1.movementModel = ShortestPathMapBasedMovement
+
+# Mapa permitido
+Group1.okMaps = 1
+
+# Tempo de espera
+#
+# Durante o teste básico usamos um intervalo
+# pequeno para manter os veículos activos.
+Group1.waitTime = 10, 30
+
+
+# ============================================================
+# VELOCIDADE DOS VEÍCULOS
+# ============================================================
+
+# 10 m/s = 36 km/h
+# 20 m/s = 72 km/h
+Group1.speed = 10, 20
+
+
+# ============================================================
+# ROUTER DTN
+# ============================================================
+
+# Epidemic Router
+#
+# Escolhido inicialmente porque permite validar
+# facilmente o Store-Carry-Forward.
+Group1.router = EpidemicRouter
+
+
+# ============================================================
+# BUFFER
+# ============================================================
+
+# Buffer de armazenamento DTN
+Group1.bufferSize = 10M
+
+
+# ============================================================
+# INTERFACE
+# ============================================================
+
+Group1.nrofInterfaces = 1
+
+Group1.interface1 = LoRaInterface
+
+
+# ============================================================
+# EVENTS
+# ============================================================
+
+# Agora vamos gerar mensagens
+Events.nrof = 1
+
+
+# ============================================================
+# EVENTO 1
+# GERADOR DE MENSAGENS
+# ============================================================
+
+Events1.class = MessageEventGenerator
+
+
+# ------------------------------------------------------------
+# HOSTS PARTICIPANTES
+# ------------------------------------------------------------
+#
+# Todos os hosts válidos:
+#
+# 0
+# 1
+# 2
+# 3
+# 4
+#
+# O gerador escolherá os nós dentro deste intervalo.
+Events1.hosts = 0, 4
+
+
+# ------------------------------------------------------------
+# INTERVALO DE GERAÇÃO
+# ------------------------------------------------------------
+#
+# Para o teste básico:
+#
+# 60 a 120 segundos
+#
+# Isto NÃO representa ainda os sensores reais.
+#
+# Serve apenas para verificar:
+# - criação
+# - transporte
+# - encaminhamento
+# - entrega
+Events1.interval = 60, 120
+
+
+# ------------------------------------------------------------
+# TAMANHO DAS MENSAGENS
+# ------------------------------------------------------------
+#
+# Pequenas mensagens representando eventos
+# de auditoria e monitorização.
+Events1.size = 1k, 5k
+
+
+# ------------------------------------------------------------
+# PREFIXO
+# ------------------------------------------------------------
+
+Events1.prefix = AUD
+
+
+# ============================================================
+# REPORTS
+# ============================================================
+
+Report.nrofReports = 1
+
+
+# ============================================================
+# RELATÓRIO DE ESTATÍSTICAS
+# ============================================================
+
+Report.report1 = MessageStatsReport
+
+
+# ============================================================
+# CONFIGURAÇÃO FINAL
+# ============================================================
+
+# Guardar resultados após toda a simulação
+Report.warmup = 0
+
+
+# ============================================================
+# FIM DA CONFIGURAÇÃO
+# ============================================================

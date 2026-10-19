@@ -1,0 +1,215 @@
+# ============================================================
+# BATERIA EXPERIMENTAL 2
+# IMPACTO DA DENSIDADE DE NÓS MÓVEIS
+# CENÁRIO D2 - 10 VEÍCULOS
+# CAÁLA - HUAMBO
+# ============================================================
+#
+# OBJECTIVO:
+#
+# Avaliar a influência do aumento do número de veículos
+# no desempenho da rede DTN.
+#
+# PARÂMETROS FIXOS:
+#
+# - Alcance LoRa: 1500 metros
+# - Tempo de simulação: 6 horas
+# - Router: EpidemicRouter
+# - Buffer: 10 MB
+# - Geração de dados: 30 em 30 minutos
+# - Velocidade: 10 a 20 m/s
+#
+# VARIÁVEL EXPERIMENTAL:
+#
+# - Número de veículos: 10
+#
+# ============================================================
+
+
+# ============================================================
+# SCENARIO
+# ============================================================
+
+Scenario.name = Caala_Huambo_DTN_10_Veiculos
+
+Scenario.simulateConnections = true
+
+Scenario.updateInterval = 1
+
+Scenario.endTime = 21600
+
+
+# ============================================================
+# MOVIMENTO
+# ============================================================
+
+MovementModel.worldSize = 45069, 32933
+
+MovementModel.warmup = 0
+
+MovementModel.rngSeed = 1
+
+
+# ============================================================
+# MAPA
+# ============================================================
+
+MapBasedMovement.nrofMapFiles = 1
+
+MapBasedMovement.mapFile1 = data/caala_huambo_roads.wkt
+
+
+# ============================================================
+# INTERFACE LoRa
+# ============================================================
+
+LoRaInterface.type = SimpleBroadcastInterface
+
+
+# Velocidade de transmissão
+
+LoRaInterface.transmitSpeed = 250k
+
+
+# Alcance de comunicação
+
+LoRaInterface.transmitRange = 1500
+
+
+# ============================================================
+# HOST GROUPS
+# ============================================================
+
+Scenario.nrofHostGroups = 1
+
+
+# ============================================================
+# GRUPO DE VEÍCULOS
+# ============================================================
+
+Group1.groupID = VEHICLE
+
+
+# VARIÁVEL EXPERIMENTAL
+# Número de veículos
+
+Group1.nrofHosts = 10
+
+
+# ============================================================
+# MOBILIDADE
+# ============================================================
+
+Group1.movementModel = ShortestPathMapBasedMovement
+
+Group1.okMaps = 1
+
+Group1.waitTime = 10, 30
+
+
+# ============================================================
+# VELOCIDADE DOS VEÍCULOS
+# ============================================================
+
+Group1.speed = 10, 20
+
+
+# ============================================================
+# ROUTER DTN
+# ============================================================
+
+Group1.router = EpidemicRouter
+
+
+# ============================================================
+# BUFFER
+# ============================================================
+
+Group1.bufferSize = 10M
+
+
+# ============================================================
+# INTERFACE
+# ============================================================
+
+Group1.nrofInterfaces = 1
+
+Group1.interface1 = LoRaInterface
+
+
+# ============================================================
+# EVENTS
+# ============================================================
+
+Events.nrof = 1
+
+
+# ============================================================
+# GERADOR DE MENSAGENS
+# ============================================================
+
+Events1.class = MessageEventGenerator
+
+
+# ============================================================
+# NÓS PARTICIPANTES
+# ============================================================
+#
+# No THE ONE os nós são numerados:
+#
+# 0 até 9
+#
+# Vamos manter:
+#
+# Nó 0 -> origem inicial
+# Nó 4 -> destino
+#
+# Os restantes veículos funcionam como nós
+# móveis de encaminhamento DTN.
+#
+# ============================================================
+
+Events1.hosts = 0, 4
+
+
+# ============================================================
+# PERIODICIDADE
+# ============================================================
+#
+# Uma mensagem a cada 30 minutos
+#
+# 30 minutos = 1800 segundos
+#
+# ============================================================
+
+Events1.interval = 1800, 1800
+
+
+# ============================================================
+# TAMANHO DAS MENSAGENS
+# ============================================================
+
+Events1.size = 1k, 5k
+
+
+# ============================================================
+# PREFIXO
+# ============================================================
+
+Events1.prefix = AUD
+
+
+# ============================================================
+# REPORTS
+# ============================================================
+
+Report.nrofReports = 1
+
+Report.report1 = MessageStatsReport
+
+Report.warmup = 0
+
+
+# ============================================================
+# FIM
+# ============================================================
